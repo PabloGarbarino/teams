@@ -3,7 +3,7 @@ Software desarrollado para el curso FullStack de la UTN
 1) Importar base de datos (No hace falta crearla en el gestor)
 2) Ejecutar en /teams:
    a) npm install
-   b) npm run dev
+   b) npm run serve
 
 OBSERVACIONES:
 Usuario de prueba:
