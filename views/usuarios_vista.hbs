@@ -306,7 +306,7 @@
                 if (request.status === 200) {
                     arr = JSON.parse(request.response);
                     if (arr.length < 1)
-                        return alert("No tiene más empresas para ser asignadas");
+                        return alert("No tiene más equipos para ser asignados");
                     for (var i = 0; i < arr.length; i++) {
                         var option = document.createElement("OPTION"),
                             txt = document.createTextNode(arr[i].nombre);
