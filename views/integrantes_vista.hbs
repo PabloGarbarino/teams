@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrantes</title>
+</head>
+
+<body>
+    <!-- Header -->
+    {{> header}}
+
+    <!-- Nav -->
+    {{> navbar}}
+    <div class="container">
+        <h2>Lista - Integrantes</h2>
+        </hr>
+        <button type="button" class="btn btn-primary btnAgregar" data-toggle="modal" data-target="#myModalAdd">
+            Agregar
+        </button>
+        <table class="table table-striped" id="myTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Puesto</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td>{{idIntegrante}}</td>
+                    <td>{{nombre}}</td>
+                    <td>{{apellido}}</td>
+                    <td>{{puesto}}</td>
+                    <td>
+                        <button type="button" class="btn btn-success btnEdit">
+                            <a class="select-bt-size">Editar</a>
+                        </button>
+                        <button type="button" class="btn btn-danger btnDelete">
+                            <a class="select-bt-size">Eliminar</a>
+                        </button>
+
+                        {{!-- <button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#modalUpdate">
+                            Modificar
+                        </button>
+                        <button type="button" class="btn btn-danger">
+                            Eliminar
+                        </button> --}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    {{!-- AÑADIR Modal --}}
+    <form action="/save" method="post" id="addForm">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo integrante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="puesto" class="form-control" placeholder="Puesto" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{!-- /EDITAR --}}
+    <form action="/update" method="post" id="editForm">
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Editar integrante </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input id="idIntegrante" name="idIntegrante" type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="puesto" class="form-control" placeholder="Puesto" required>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="id" class="idIntegrante">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    {{!-- /DELETE --}}
+    <form action="/delete" method="post" id="deleteForm">
+        <div class="modal" tabindex="-1" role="dialog" id="DeleteModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar integrante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <b>
+                            <p>¿Desea borrarlo?</p>
+                        </b>
+                        <div class="form-group">
+                            <input id="idIntegrante" name="idIntegrante" type="hidden">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" class="idIntegrante">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Footer -->
+    {{> footer}}
+    
+    <script>
+        $(document).ready(function () {
+            //Update
+            $(".btnEdit").on('click', function () {
+                //Obtengo la fila
+                var currentRow = $(this).closest("tr");
+                //Obtengo el value de la celda según column
+                let idIntegrante = currentRow.find("td:eq(0)").text();
+                let nombre = currentRow.find("td:eq(1)").text();
+                let apellido = currentRow.find("td:eq(2)").text();
+                let puesto = currentRow.find("td:eq(3)").text();
+                $('#updateModal').modal('show');
+                //Bindeo variables para el method post
+                //Oculto input idIntegrante
+                document.forms['editForm']['idIntegrante'].value = idIntegrante;
+                document.forms['editForm']['nombre'].value = nombre;
+                document.forms['editForm']['apellido'].value = apellido;
+                document.forms['editForm']['puesto'].value = puesto;
+            });
+
+            //Delete
+            $(".btnDelete").on('click', function () {
+                //Obtengo la fila
+                var currentRow = $(this).closest("tr");
+                //Obtengo el value de la celda según column
+                let idIntegrante = currentRow.find("td:eq(0)").text();
+                $('#DeleteModal').modal('show');
+                //Bindeo variables para el method post
+                //Oculto input idIntegrante
+                document.forms['deleteForm']['idIntegrante'].value = idIntegrante;
+            });
+        })
+    </script>
+</body>
+
+</html>

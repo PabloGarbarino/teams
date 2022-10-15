@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Home</title>
+</head>
+
+<body>
+    <!-- Header -->
+    {{> header}}
+
+    <!-- Nav -->
+    {{> navbar}}
+
+    <div class="container">
+        <div class="teams-cards"></div>
+    </div>
+
+    <!-- Footer -->
+    {{> footer}}
+    
+    <script>
+        $(document).ready(function () {
+            let request = new XMLHttpRequest()
+            request.open("GET", "http://localhost:5000/getUserTeams");
+            request.send();
+
+            request.onload = () => {
+                if (request.status === 200) {
+                    arr = JSON.parse(request.response);
+                    console.log(arr)
+                    let htmlCode = '';
+                    arr.forEach(function (Objects) {
+                        htmlCode =
+                            htmlCode +
+                            `
+                            <div class="cardTeams" style="width: 18rem;">
+                                <div class="card-header">
+                                    ${Objects.nombre}
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">Este equipo comenzó en ${Objects.comienzo}.</p>
+                                </div>
+                            </div>
+                        `;
+                        const Cards = document.querySelector(".teams-cards");
+                        Cards.innerHTML = htmlCode;
+                    });
+                } else {
+                    console.log("Page not found")// if link is broken, output will be page not found
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

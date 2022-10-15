@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipos</title>
+</head>
+
+<body>
+    <!-- Header -->
+    {{> header}}
+
+    <!-- Nav -->
+    {{> navbar}}
+    <div class="container">
+        <h2>Lista - Equipos</h2>
+        </hr>
+        <button type="button" class="btn btn-primary btnAgregar">
+            Agregar
+        </button>
+        <table class="table table-striped" id="myTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Comienzo</th>
+                    <th scope="col">Acciones</th>
+                    <th scope="col">Permisos</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tbody>
+                {{#each results}}
+                <tr>
+                    <td>{{idEquipo}}</td>
+                    <td>{{nombre}}</td>
+                    <td>{{comienzo}}</td>
+                    <td>
+                        <button type="button" class="btn btn-success btnEdit">
+                            <a class="select-bt-size">Editar</a>
+                        </button>
+                        <button type="button" class="btn btn-danger btnDelete">
+                            <a class="select-bt-size">Eliminar</a>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success btnAgregarPermisos">
+                            <a class="select-bt-size">Agregar</a>
+                        </button>
+                        <button type="button" class="btn btn-danger btnQuitarPermisos">
+                            <a class="select-bt-size">Quitar</a>
+                        </button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    {{!-- AÑADIR Modal --}}
+    <form action="/save_team" method="post" id="addForm">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir nuevo equipo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="comienzo" class="form-control" placeholder="Comienzo" required>
+                        </div>
+                        <div class="form-group">
+                            <p><b>Seleccione integrantes</b></p>
+                            <select id="select" name="integrantes" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{!-- /EDITAR --}}
+    <form action="/update_team" method="post" id="editForm">
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Editar equipo </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input id="idEquipo" name="idEquipo" type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="comienzo" class="form-control" placeholder="Comienzo" required>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="id" class="idIntegrante">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{!-- /DELETE --}}
+    <form action="/delete_team" method="post" id="deleteForm">
+        <div class="modal" tabindex="-1" role="dialog" id="DeleteModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar equipo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <b>
+                            <p>¿Desea borrarlo?</p>
+                        </b>
+                        <div class="form-group">
+                            <input id="idEquipo" name="idEquipo" type="hidden">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" class="idEquipo">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{!-- PERMISOS --}}
+
+    {{!-- AGREGAR --}}
+    <form action="/add_integrantes_equipos" method="post" id="addPermisosForm">
+        <div class="modal fade" id="myModalPermisosAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir integrantes al equipo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input id="idEquipo" name="idEquipo" type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <p><b>Seleccione integrantes</b></p>
+                            <select id="cmbAddPermisos" name="integrantes" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {{!-- QUITAR --}}
+    <form action="/remove_integrantes_equipos" method="post" id="removePermisosForm">
+        <div class="modal fade" id="myModalPermisosRemove" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Quitar permisos al usuario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input id="idEquipo" name="idEquipo" type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <p><b>Seleccione integrantes</b></p>
+                            <select id="cmbRemovePermisos" name="integrantes" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Footer -->
+    {{> footer}}
+
+    <script>
+        $(document).ready(function () {
+            //Create
+            $(".btnAgregar").on('click', function () {
+                $('#myModalAdd').modal('show');
+                populateDropDownList();
+            });
+            //Update
+            $(".btnEdit").on('click', function () {
+                //Obtengo la fila
+                var currentRow = $(this).closest("tr");
+                //Obtengo el value de la celda según column
+                let idEquipo = currentRow.find("td:eq(0)").text();
+                let nombre = currentRow.find("td:eq(1)").text();
+                let comienzo = currentRow.find("td:eq(2)").text();
+                $('#updateModal').modal('show');
+                //Bindeo variables para el method post
+                //Oculto input idIntegrante
+                document.forms['editForm']['idEquipo'].value = idEquipo;
+                document.forms['editForm']['nombre'].value = nombre;
+                document.forms['editForm']['comienzo'].value = comienzo;
+            });
+
+            //Delete
+            $(".btnDelete").on('click', function () {
+                //Obtengo la fila
+                var currentRow = $(this).closest("tr");
+                //Obtengo el value de la celda según column
+                let idEquipo = currentRow.find("td:eq(0)").text();
+                $('#DeleteModal').modal('show');
+                //Bindeo variables para el method post
+                //Oculto input idIntegrante
+                document.forms['deleteForm']['idEquipo'].value = idEquipo;
+            });
+
+            //Permisos
+            //Add
+            $(".btnAgregarPermisos").on('click', function () {
+                $('#myModalPermisosAdd').modal('show');
+                var currentRow = $(this).closest("tr");
+                let idEquipo = currentRow.find("td:eq(0)").text();
+                document.forms['addPermisosForm']['idEquipo'].value = idEquipo;
+                addPermisos(idEquipo);
+            });
+            //Remove
+            $(".btnQuitarPermisos").on('click', function () {
+                $('#myModalPermisosRemove').modal('show');
+                var currentRow = $(this).closest("tr");
+                let idEquipo = currentRow.find("td:eq(0)").text();
+                document.forms['removePermisosForm']['idEquipo'].value = idEquipo;
+                removePermisos(idEquipo);
+            });
+        })
+
+        function addPermisos(idEquipo) {
+            clearCmb(document.getElementById('cmbAddPermisos'));
+            let request = new XMLHttpRequest()
+            request.open("GET", "http://localhost:5000/add_integrante_teams/" + idEquipo);
+            request.send();
+            request.onload = () => {
+                if (request.status === 200) {
+                    arr = JSON.parse(request.response);
+                    if (arr.length < 1)
+                        return alert("No tiene más integrantes para ser asignados");
+                    for (var i = 0; i < arr.length; i++) {
+                        var option = document.createElement("OPTION"),
+                            txt = document.createTextNode(arr[i].nombre);
+                        option.appendChild(txt);
+                        option.setAttribute("value", arr[i].idIntegrante);
+                        select.insertBefore(option, select.lastChild);
+                    }
+                } else {
+                    console.log("Page not found")// if link is broken, output will be page not found
+                }
+            }
+            var select = document.getElementById("cmbAddPermisos");
+
+        }
+
+        function removePermisos(idEquipo) {
+            clearCmb(document.getElementById('cmbRemovePermisos'));
+            let request = new XMLHttpRequest()
+            request.open("GET", "http://localhost:5000/remove_integrante_teams/" + idEquipo);
+            request.send();
+            request.onload = () => {
+                if (request.status === 200) {
+                    arr = JSON.parse(request.response);
+                    if (arr.length < 1)
+                        return alert("No tiene permisos asignados");
+                    for (var i = 0; i < arr.length; i++) {
+                        var option = document.createElement("OPTION"),
+                            txt = document.createTextNode(arr[i].nombre);
+                        option.appendChild(txt);
+                        option.setAttribute("value", arr[i].idIntegrante);
+                        select.insertBefore(option, select.lastChild);
+                    }
+                } else {
+                    console.log("Page not found")// if link is broken, output will be page not found
+                }
+            }
+            var select = document.getElementById("cmbRemovePermisos");
+
+        }
+
+        function populateDropDownList() {
+            clearCmb(document.getElementById('select'));
+            let request = new XMLHttpRequest()
+            request.open("GET", "http://localhost:5000/getintegrantes");
+            request.send();
+            request.onload = () => {
+                if (request.status === 200) {
+                    arr = JSON.parse(request.response);
+                    for (var i = 0; i < arr.length; i++) {
+                        var option = document.createElement("OPTION"),
+                            txt = document.createTextNode(arr[i].nombre + " " + arr[i].apellido);
+                        option.appendChild(txt);
+                        option.setAttribute("value", arr[i].idIntegrante);
+                        select.insertBefore(option, select.lastChild);
+                    }
+                } else {
+                    console.log("Page not found")// if link is broken, output will be page not found
+                }
+            }
+            var select = document.getElementById("select");
+        }
+
+        function clearCmb(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for (i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+    </script>
+</body>
+
+</html>
